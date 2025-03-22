@@ -1,0 +1,56 @@
+name: Generate Processed Data
+
+on:
+  repository_dispatch:
+    types: [spark]
+
+jobs:
+  run-processing:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: temurin
+
+    - name: Set up Spark
+      uses: vemonet/setup-spark@v1
+      with:
+        spark-version: '3.5.3'
+        hadoop-version: '3'
+
+    - name: Install dependencies
+      run: pip install kaggle pyspark pandas
+
+    - name: Set Kaggle token
+      run: |
+        mkdir -p ~/.kaggle
+        echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+        chmod 600 ~/.kaggle/kaggle.json
+
+    - name: Run Spark processing
+      run: python spark_jobs/process_taxi_data.py
+
+    - name: Commit and push results
+      env:
+        CI_COMMIT_MESSAGE: "✨ Actualizar resultados procesados"
+        CI_COMMIT_AUTHOR: DavidSimonch
+      run: |
+        git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+        git config --global user.email "david.simonch@gmail.com"
+        git add results/*.json
+        git commit -m "${{ env.CI_COMMIT_MESSAGE }}" || echo "Sin cambios que commitear"
+        git push
