@@ -44,7 +44,7 @@ jobs:
         chmod 600 ~/.kaggle/kaggle.json
 
     - name: Run Spark processing
-      run: python spark_jobs/process_taxi_data.py
+      run: python process_taxi_data.py
 
     - name: Commit and push results
       env:
