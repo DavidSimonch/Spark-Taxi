@@ -7,6 +7,7 @@ from pyspark.sql.functions import hour, avg, count
 
 # --- Descargar el dataset si no existe ---
 def download_dataset():
+    #checar si existe la carpeta data
     os.makedirs("data", exist_ok=True)
     if not any(fname.endswith(".csv") for fname in os.listdir("data")):
         print("📥 Descargando dataset desde Kaggle...")
