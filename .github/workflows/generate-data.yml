@@ -1,6 +1,8 @@
 name: Generate Processed Data
 
 on:
+  push:
+    branches: [main]
   repository_dispatch:
     types: [spark]
 
