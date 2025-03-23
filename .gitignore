@@ -5,4 +5,4 @@ venv/
 kaggle.json
 results/*.json
 data/*.csv
-.streamlit/
+.streamlit/secrets.toml

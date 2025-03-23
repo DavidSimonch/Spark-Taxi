@@ -2,3 +2,6 @@ kaggle
 pyspark
 pandas
 streamlit
+requests
+pymongo
+sqlalchemy
