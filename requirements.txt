@@ -5,3 +5,4 @@ streamlit
 requests
 pymongo
 sqlalchemy
+psycopg2-binary
